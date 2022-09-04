@@ -11,7 +11,7 @@ function App() {
     <div className="App">
     <Routes>
     <Route path="/" element={<CardCreator />} />
-    <Route path="/yourbusinesscard" element={<BusinessCard/>} />
+    <Route path="/yourbusinesscard/:id" element={<BusinessCard/>} />
     </Routes>
     </div>
     </BrowserRouter>

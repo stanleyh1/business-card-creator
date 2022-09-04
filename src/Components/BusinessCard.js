@@ -1,20 +1,23 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
 import { db } from "../firebase.js";
-import { collection, getDocs } from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
 
 const BusinessCard = () => {
 
-    const [businessCards, setBusinessCards] = useState([]);
+    const [businessCard, setBusinessCard] = useState([]);
     const [loading, setLoading] = useState(false);
-    const cardsCollection = collection(db, "Business cards");
+    const { id } = useParams();
+    const cardRef = doc(db, "Business cards", id);
+    console.log(cardRef)
+
 
     useEffect(() => {
-        const getBusinessCards = async () => {
-            const cards = await getDocs(cardsCollection)
-            setBusinessCards(cards.docs.map((doc) => ({...doc.data()})))
+        const getBusinessCard = async () => {
+            const card = await getDoc(cardRef)
+            setBusinessCard(card.data())
         };
-
-        getBusinessCards();
+        getBusinessCard();
     },[]);
     
 
@@ -26,7 +29,7 @@ const BusinessCard = () => {
     return(
         <div>
             <h1>Your business card</h1>
-            {businessCards.map((businessCard) => (
+            
                 <div key={businessCard.name}>
                     <h2>{businessCard.name}</h2>
                     <h3>{businessCard.businessName}</h3>
@@ -35,7 +38,6 @@ const BusinessCard = () => {
                     <p>{businessCard.phoneNumber}</p>
                     <p>{businessCard.website}</p>
                 </div>
-            ))}
         </div>
     )
 }

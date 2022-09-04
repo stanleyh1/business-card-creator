@@ -1,13 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../firebase.js";
 import { collection, addDoc } from 'firebase/firestore'
-import { Navigate } from "react-router-dom";
+
 
 const CardCreator = () => {
 
     const cardsCollectionRef = collection(db, "Business cards");
-
-    
+    const navigate = useNavigate();
     const [businessCard, setBusinessCard] = useState( {name: "", businessName: "", jobTitle: "", email: "", phoneNumber: "", website: ""} )
     
     const handleChange = (event) => {
@@ -21,7 +21,7 @@ const CardCreator = () => {
     const createCard = async (event) => {
         event.preventDefault()
         const result = await addDoc(cardsCollectionRef, {name: businessCard.name, businessName: businessCard.businessName, jobTitle: businessCard.jobTitle,  phoneNumber: businessCard.phoneNumber, email: businessCard.email, website: businessCard.website})
-        Navigate.to('/yourbusinesscard')
+        navigate(`/yourbusinesscard/${result.id}`)
     }
 
     return(
